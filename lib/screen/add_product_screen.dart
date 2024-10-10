@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:product_info/controller/product_controller.dart';
+import 'package:product_info/model/products.dart';
 import 'package:product_info/widget/button_widget.dart';
 import 'package:product_info/widget/text_field_widget.dart';
 
@@ -14,6 +17,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   TextEditingController totalProduct = TextEditingController();
   TextEditingController productSize = TextEditingController();
   
+  final ProductController productController = Get.put(ProductController());
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +29,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TextFieldWidget(
+            Column(
+              children: [
+                TextFieldWidget(
               title: 'পণ্যের নাম :',
               controller: productName
             ),
+            const SizedBox(height: 24.0),
             SizedBox(
               height: 100.0,
               child: Row(
@@ -50,9 +58,20 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ],
               ),
             ),
+              ],
+            ),
             ButtonWidget(
               title: 'নিশ্চিত করুন',
-              onPressed: () {}
+              onPressed: () {
+                productController.addProduct(
+                  Products(
+                    name: productName.text.isNotEmpty ? productName.text : null,
+                    total: totalProduct.text.isNotEmpty ? totalProduct.text : null,
+                    size: productSize.text.isNotEmpty ? productSize.text : null,
+                  ),
+                );
+                Get.back();
+              }
             )
           ],
         ),
