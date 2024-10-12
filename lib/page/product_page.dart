@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:product_info/controller/product_controller.dart';
 import 'package:product_info/screen/add_product_screen.dart';
+import 'package:product_info/screen/edit_product_screen.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key});
@@ -26,8 +27,10 @@ class _ProductPageState extends State<ProductPage> {
             return Card(
               child: ListTile(
                 leading: IconButton(
-                  onPressed: () {},
-                  icon: Image.asset('images/edit.png', height: 18.0, width: 18.0,)
+                  onPressed: () {
+                    Get.to(EditProductScreen(product: product));
+                  },
+                  icon: Image.asset('images/edit.png', height: 22.0, width: 22.0,)
                 ),
                 title: Text(product.name ?? 'No Name'),
                 titleTextStyle: const TextStyle(color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.bold),
@@ -35,7 +38,7 @@ class _ProductPageState extends State<ProductPage> {
                 subtitleTextStyle: const TextStyle(color: Colors.grey, fontSize: 12.0),
                 trailing: Text(product.total ?? '0'),
                 leadingAndTrailingTextStyle: const TextStyle(color: Colors.indigo, fontSize: 18.0, fontWeight: FontWeight.bold),
-                onTap: () {},
+                onTap: showBottomSheet,
               ),
             );
           },
@@ -53,4 +56,127 @@ class _ProductPageState extends State<ProductPage> {
       ),
     );
   }
+
+  void showBottomSheet() => showModalBottomSheet(
+    context: context,
+    builder: (context) => Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Center(
+            child: SizedBox(
+              width: 28.0,
+              child: Divider(thickness: 4.0)
+            )
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {},
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width /2,
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'images/sale.png',
+                          height: 32.0,
+                          width: 32.0,
+                        ),
+                        const SizedBox(width: 12.0),
+                        const Text(
+                          'পণ্য বিক্রয়',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {},
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Text(
+                        'বিক্রয় মেমো',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 12.0),
+                      Image.asset(
+                        'images/recipe.png',
+                        height: 32.0,
+                        width: 32.0,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {},
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'images/buy.png',
+                        height: 32.0,
+                        width: 32.0,
+                      ),
+                      const SizedBox(width: 12.0),
+                      const Text(
+                        'পণ্য ক্রয়',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {},
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Text(
+                        'ক্রয় মেমো',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 12.0),
+                      Image.asset(
+                        'images/recipe.png',
+                        height: 32.0,
+                        width: 32.0,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+
 }

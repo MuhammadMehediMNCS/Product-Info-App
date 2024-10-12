@@ -44,14 +44,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 children: [
                   Expanded(
                     child: TextFieldWidget(
-                      title: 'মোট পণ্য',
+                      title: 'মোট পণ্য :',
                       controller: totalProduct
                     ),
                   ),
                   SizedBox(width: MediaQuery.of(context).size.width * .2),
                   Expanded(
                     child: TextFieldWidget(
-                      title: 'পণ্যের সাইজ',
+                      title: 'পণ্যের সাইজ :',
                       controller: productSize
                     ),
                   ),
