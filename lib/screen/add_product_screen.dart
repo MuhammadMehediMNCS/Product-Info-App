@@ -24,23 +24,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('নতুন পণ্য'),
-        titleTextStyle: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w700),
+        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w700),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                TextFieldWidget(
-              title: 'পণ্যের নাম :',
-              controller: productName
-            ),
-            const SizedBox(height: 24.0),
-            SizedBox(
-              height: 100.0,
-              child: Row(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextFieldWidget(
+                title: 'পণ্যের নাম :',
+                controller: productName
+              ),
+              const SizedBox(height: 24.0),
+              Row(
                 children: [
                   Expanded(
                     child: TextFieldWidget(
@@ -57,23 +53,22 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ],
               ),
-            ),
-              ],
-            ),
-            ButtonWidget(
-              title: 'নিশ্চিত করুন',
-              onPressed: () {
-                productController.addProduct(
-                  Products(
-                    name: productName.text.isNotEmpty ? productName.text : null,
-                    total: totalProduct.text.isNotEmpty ? totalProduct.text : null,
-                    size: productSize.text.isNotEmpty ? productSize.text : null,
-                  ),
-                );
-                Get.back();
-              }
-            )
-          ],
+              SizedBox(height: MediaQuery.of(context).size.height * .2),
+              ButtonWidget(
+                title: 'নিশ্চিত করুন',
+                onPressed: () {
+                  productController.addProduct(
+                    Products(
+                      name: productName.text.isNotEmpty ? productName.text : null,
+                      total: totalProduct.text.isNotEmpty ? totalProduct.text : null,
+                      size: productSize.text.isNotEmpty ? productSize.text : null,
+                    ),
+                  );
+                  Get.back();
+                }
+              )
+            ],
+          ),
         ),
       ),
     );

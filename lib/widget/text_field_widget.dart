@@ -6,8 +6,10 @@ class TextFieldWidget extends StatelessWidget {
   final TextInputType? keyboard;
   final String? labelText;
   final bool readOnly;
+  final bool? enabled;
   final int? maxLine;
   final VoidCallback? onPressed;
+  final Function(String)? onChanged;
 
   const TextFieldWidget({
     super.key,
@@ -16,8 +18,10 @@ class TextFieldWidget extends StatelessWidget {
     this.keyboard,
     this.labelText,
     this.readOnly = false,
+    this.enabled,
     this.maxLine,
-    this.onPressed
+    this.onPressed,
+    this.onChanged
   });
 
   @override
@@ -44,6 +48,7 @@ class TextFieldWidget extends StatelessWidget {
         readOnly: readOnly,
         maxLines: maxLine,
         onTap: onPressed,
+        onChanged: onChanged,
       ),
     ],
   );
