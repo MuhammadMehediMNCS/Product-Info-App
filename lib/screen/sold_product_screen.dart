@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:product_info/controller/product_controller.dart';
 import 'package:product_info/model/sold_product.dart';
+import 'package:product_info/page/product_page.dart';
 import 'package:product_info/widget/button_widget.dart';
 import 'package:product_info/widget/text_field_widget.dart';
 
@@ -9,14 +10,14 @@ class SoldProductScreen extends StatefulWidget {
   final String? productName;
   final String? productSize;
   final String? totalProduct;
-  final int index; // Add index to identify which product to update
+  final int index;
 
   const SoldProductScreen({
     super.key,
     required this.productName,
     required this.productSize,
     required this.totalProduct,
-    required this.index, // Pass the index
+    required this.index,
   });
 
   @override
@@ -44,7 +45,6 @@ class _SoldProductScreenState extends State<SoldProductScreen> {
     double price = double.tryParse(priceController.text) ?? 0;
     double percent = double.tryParse(percentController.text) ?? 0;
 
-    // Calculate the total amount based on the price and percentage
     double totalAmount = amount * price;
     if (percent > 0) {
       totalAmount -= (totalAmount * percent / 100);
@@ -54,7 +54,6 @@ class _SoldProductScreenState extends State<SoldProductScreen> {
   }
 
   void onConfirmSale() {
-    // Subtract sold amount from total products
     int totalProducts = int.tryParse(totalController.text) ?? 0;
     int soldAmount = int.tryParse(amountController.text) ?? 0;
 
@@ -64,22 +63,20 @@ class _SoldProductScreenState extends State<SoldProductScreen> {
       return;
     }
 
-    // Update the product's total in ProductController
     var updatedProduct = productController.productList[widget.index];
     updatedProduct.total = remainingProducts.toString();
     productController.updateProduct(widget.index, updatedProduct);
 
-    // Save sold product details to soldProductList
     var soldProduct = SoldProduct(
       productName: widget.productName,
       productSize: widget.productSize,
       soldAmount: soldAmount.toString(),
       totalPrice: totalAmountController.text,
+      percent: percentController.text,
     );
     productController.addSoldProduct(soldProduct);
 
-    // Navigate back to the product page Get.off(Next Screen);
-    Get.back();
+    Get.off(const ProductPage());
   }
 
   @override
@@ -157,7 +154,7 @@ class _SoldProductScreenState extends State<SoldProductScreen> {
                     title: 'টাকা :',
                     controller: totalAmountController,
                     keyboard: TextInputType.number,
-                    enabled: false, // Disable input as this is calculated
+                    enabled: false,
                   ),
                 ),
               ),
