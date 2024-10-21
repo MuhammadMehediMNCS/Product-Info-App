@@ -37,6 +37,7 @@ class _SaleMemoPageState extends State<SaleMemoPage> {
           itemCount: productController.soldProductList.length,
           itemBuilder: (context, index) {
             var soldProduct = productController.soldProductList[index];
+            
             return Column(
               children: [
                 Text(soldProduct.productName ?? "No Name"),

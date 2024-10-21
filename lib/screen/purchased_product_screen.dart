@@ -73,7 +73,7 @@ class _PurchasedProductScreenState extends State<PurchasedProductScreen> {
     PurchasedProduct purchasedProduct = PurchasedProduct(
       productName: widget.productName,
       productSize: widget.productSize,
-      totalProduct: totalController.text,
+      totalProduct: updatedTotal.toString(),
       newProduct: newController.text,
       orderProduct: orderController.text,
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:product_info/controller/product_controller.dart';
+import 'package:product_info/page/buy_memo_page.dart';
 import 'package:product_info/page/sale_memo_page.dart';
 import 'package:product_info/screen/add_product_screen.dart';
 import 'package:product_info/screen/edit_product_screen.dart';
@@ -153,7 +154,9 @@ class _ProductPageState extends State<ProductPage> {
                               ),
                               Expanded(
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Get.to(const BuyMemoPage());
+                                  },
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
