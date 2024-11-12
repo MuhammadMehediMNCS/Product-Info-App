@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:product_info/controller/product_controller.dart';
+import 'package:product_info/main.dart';
 import 'package:product_info/model/purchased_product.dart';
 import 'package:product_info/widget/button_widget.dart';
 import 'package:product_info/widget/text_field_widget.dart';
@@ -28,6 +29,8 @@ class _PurchasedProductScreenState extends State<PurchasedProductScreen> {
   TextEditingController newController = TextEditingController();
   TextEditingController orderController = TextEditingController();
   TextEditingController dueController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
 
   final ProductController productController = Get.find<ProductController>();
 
@@ -38,6 +41,7 @@ class _PurchasedProductScreenState extends State<PurchasedProductScreen> {
     totalController.text = widget.totalProduct ?? "0";
     newController.addListener(calculateProductValues);
     orderController.addListener(calculateProductValues);
+    priceController.addListener(calculateProductValues);
   }
 
   @override
@@ -46,17 +50,22 @@ class _PurchasedProductScreenState extends State<PurchasedProductScreen> {
     orderController.dispose();
     totalController.dispose();
     dueController.dispose();
+    priceController.dispose();
+    amountController.dispose();
     super.dispose();
   }
 
   void calculateProductValues() {
     int newProduct = int.tryParse(newController.text) ?? 0;
     int orderProduct = int.tryParse(orderController.text) ?? 0;
+    int productPrice = int.tryParse(priceController.text) ?? 0;
 
     int dueProduct = orderProduct - newProduct;
+    int totalPrice = newProduct * productPrice;
 
     setState(() {
       dueController.text = dueProduct.toString();
+      amountController.text = totalPrice.toString();
     });
   }
 
@@ -76,13 +85,16 @@ class _PurchasedProductScreenState extends State<PurchasedProductScreen> {
       totalProduct: updatedTotal.toString(),
       newProduct: newController.text,
       orderProduct: orderController.text,
+      dueProduct: dueController.text,
+      price: priceController.text,
+      totalPrice: amountController.text
     );
 
     // Add the PurchasedProduct to the controller
     productController.addPurchasedProduct(purchasedProduct);
 
     // Go back to the previous screen or show a success message
-    Get.back();
+    Get.off(const HomePage());
   }
 
   @override
@@ -133,7 +145,7 @@ class _PurchasedProductScreenState extends State<PurchasedProductScreen> {
                 children: [
                   Expanded(
                     child: TextFieldWidget(
-                      title: "অর্ডার পণ্য:",
+                      title: "অর্ডার পণ্য :",
                       controller: orderController,
                       keyboard: TextInputType.number,
                     )
@@ -143,6 +155,27 @@ class _PurchasedProductScreenState extends State<PurchasedProductScreen> {
                     child: TextFieldWidget(
                       title: "বাঁকি পণ্য :",
                       controller: dueController,
+                      keyboard: TextInputType.number,
+                      enabled: false,
+                    )
+                  )
+                ],
+              ),
+              const SizedBox(height: 18.0),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFieldWidget(
+                      title: "দর :",
+                      controller: priceController,
+                      keyboard: TextInputType.number,
+                    )
+                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width / 8),
+                  Expanded(
+                    child: TextFieldWidget(
+                      title: "টাকা :",
+                      controller: amountController,
                       keyboard: TextInputType.number,
                       enabled: false,
                     )

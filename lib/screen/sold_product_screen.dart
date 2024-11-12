@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:product_info/controller/product_controller.dart';
+import 'package:product_info/main.dart';
 import 'package:product_info/model/sold_product.dart';
-import 'package:product_info/page/product_page.dart';
 import 'package:product_info/widget/button_widget.dart';
 import 'package:product_info/widget/text_field_widget.dart';
 
@@ -70,13 +70,14 @@ class _SoldProductScreenState extends State<SoldProductScreen> {
     var soldProduct = SoldProduct(
       productName: widget.productName,
       productSize: widget.productSize,
-      soldAmount: soldAmount.toString(),
+      soldAmount: amountController.text,
+      price: priceController.text,
       totalPrice: totalAmountController.text,
       percent: percentController.text,
     );
     productController.addSoldProduct(soldProduct);
 
-    Get.off(const ProductPage());
+    Get.off(const HomePage());
   }
 
   @override
