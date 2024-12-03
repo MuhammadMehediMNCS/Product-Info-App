@@ -93,8 +93,7 @@ class _PurchasedProductScreenState extends State<PurchasedProductScreen> {
     // Add the PurchasedProduct to the controller
     productController.addPurchasedProduct(purchasedProduct);
 
-    // Go back to the previous screen or show a success message
-    Get.off(const HomePage());
+    Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 
   @override
@@ -106,12 +105,12 @@ class _PurchasedProductScreenState extends State<PurchasedProductScreen> {
           children: [
             Text(
               widget.productName ?? "No Name",
-              style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 6.0),
             Text(
               widget.productSize ?? "No Size",
-              style: const TextStyle(color: Colors.grey, fontSize: 10.0, fontWeight: FontWeight.bold),
+              style: const TextStyle(color: Colors.grey, fontFamily: 'TiroBangla-Regular', fontSize: 10.0, fontWeight: FontWeight.bold),
             )
           ],
         )

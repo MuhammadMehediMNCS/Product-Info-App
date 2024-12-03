@@ -1,48 +1,79 @@
+import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
 import 'dart:math';
+import 'package:math_expressions/math_expressions.dart';
 
 class CalculatorController extends GetxController {
   var output = "0".obs;
   var result = 0.0.obs;
   var memory = 0.0.obs;
-  var operation = RxnString();
-  var history = <String>[].obs;
-  var historyIndex = (-1).obs;
   var resultList = <double>[].obs;
   var showGT = false.obs;
+
+  final box = GetStorage();
+  var history = <String>[].obs;
+  final int historyLimit = 5;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Load history from storage
+    List<String>? savedHistory = box.read<List<dynamic>>('history')?.cast<String>();
+    if (savedHistory != null) {
+      history.assignAll(savedHistory);
+    }
+  }
+
+  void addToHistory(String output, String result) {
+    final entry = "Output: $output, Result: $result";
+
+    // Add to history with limit
+    if (history.length >= historyLimit) {
+      history.removeAt(0); // Remove the oldest item
+    }
+    history.add(entry);
+
+    // Save to storage
+    box.write('history', history);
+  }
 
   void buttonPressed(String buttonText) {
     if (buttonText == "C") {
       output.value = "0";
       result.value = 0.0;
-      operation.value = null;
     } else if (buttonText == "AC") {
       output.value = "0";
       result.value = 0.0;
-      operation.value = null;
-      history.clear();
-      historyIndex.value = -1;
       resultList.clear();
       showGT.value = false;
-    } else if (buttonText == "←  Check") {
-      if (historyIndex.value > 0) {
-        historyIndex.value--;
-        output.value = history[historyIndex.value].toString();
-      }
-    } else if (buttonText == "Check  →") {
-      if (historyIndex.value < history.length - 1) {
-        historyIndex.value++;
-        output.value = history[historyIndex.value].toString();
-      }
     } else if (buttonText == "⌫") {
       if (output.value.length > 1) {
         output.value = output.value.substring(0, output.value.length - 1);
+        evaluateCurrentExpression();
       } else {
         output.value = "0";
+        result.value = 0.0;
       }
-    } else if (buttonText == "GT") {
-      double sum = resultList.fold(0.0, (acc, val) => acc + val);
-      output.value = sum.toString();
+    } else if (["+", "-", "x", "÷"].contains(buttonText)) {
+    if (!output.value.endsWith(" ")) {
+      output.value += buttonText;  // If I want space every value " $buttonText ";
+    }
+  } else if (buttonText == "=") {
+    evaluateCurrentExpression();
+
+    // Format the output value
+    String formattedOutput = output.value.trim();
+    output.value = result.value % 1 == 0
+        ? result.value.toInt().toString()
+        : result.value.toString();
+
+    // Add result to history with button text sequence
+    addToHistory(formattedOutput, result.value.toString());
+
+    // Add the result to resultList and reset
+    resultList.add(result.value);
+    result.value = 0;
+    showGT.value = true;
     } else if (buttonText == "M+") {
       memory.value += double.tryParse(output.value) ?? 0.0;
       output.value = "0";
@@ -54,70 +85,73 @@ class CalculatorController extends GetxController {
     } else if (buttonText == "MRC") {
       output.value = memory.toString();
       memory.value = 0;
-    } else if (buttonText == "%") {
-      if (operation.value != null) {
-        result.value = _calculate(result.value, double.tryParse(output.value) ?? 0.0, operation.value!);
-        operation.value = null;
-        output.value = result.toString();
-      }
-      result.value = (double.tryParse(output.value) ?? 0.0) / 100;
-      output.value = result.toString();
+    } else if (buttonText == "GT") {
+      double sum = resultList.fold(0.0, (acc, val) => acc + val);
+      output.value = sum.toString();
+      result.value = 0;
     } else if (buttonText == "√") {
       result.value = sqrt(double.tryParse(output.value) ?? 0.0);
       output.value = result.toString();
-    } else if (buttonText == "=") {
-      if (operation.value != null) {
-        result.value = _calculate(result.value, double.tryParse(output.value) ?? 0.0, operation.value!);
-        operation.value = null;
-        output.value = result.toString();
+    } else if (buttonText == "%") {
+      try {
+        String expression = output.value.trim();
+
+        // If the expression contains an operator, process the percentage
+        if (expression.contains(RegExp(r'[+\-x÷]'))) {
+          // Split the expression into parts
+          List<String> parts = expression.split(RegExp(r'[\s+\-x÷]')).where((s) => s.isNotEmpty).toList();
+
+          if (parts.isNotEmpty) {
+            double lastValue = double.tryParse(parts.last) ?? 0.0;
+            double percentage = lastValue / 100;
+
+            // Replace the last value with its percentage equivalent in the expression
+            output.value = expression.replaceFirst(RegExp(r'[\d.]+$'), percentage.toString());
+            evaluateCurrentExpression(); // Recalculate the result
+          }
+        } else {
+          // Single number: Convert to percentage of 1
+          double currentValue = double.tryParse(expression) ?? 0.0;
+          result.value = currentValue / 100;
+
+          output.value = result.value % 1 == 0
+              ? result.value.toInt().toString()
+              : result.value.toStringAsFixed(6).replaceAll(RegExp(r'0+$'), '').replaceAll(RegExp(r'\.$'), '');
+        }
+      } catch (e) {
+        output.value = "Error";
       }
-      resultList.add(result.value);
-      _addToHistory(output.value);
-      showGT.value = true;
-    } else if (["+", "-", "×", "÷"].contains(buttonText)) {
-      if (operation.value != null) {
-        result.value = _calculate(result.value, double.tryParse(output.value) ?? 0.0, operation.value!);
-        operation.value = null;
-        output.value = result.toString();
-      }
-      _addToHistory(output.value);
-      result.value = double.tryParse(output.value) ?? 0.0;
-      operation.value = buttonText;
-      output.value = "0";
-      showGT.value = false;
     } else {
       if (output.value == "0") {
         output.value = buttonText;
-      } else if (output.value.length < 15) {
+      } else if (output.value.length < 100) {
         output.value += buttonText;
       }
+      evaluateCurrentExpression();
     }
   }
 
-  void _addToHistory(String value) {
-    if (value.isNotEmpty) {
-      if (historyIndex.value == history.length - 1) {
-        history.add(value);
+  void evaluateCurrentExpression() {
+    String expression = output.value;
+
+    // Replace symbols for math_expressions
+    expression = expression.replaceAll('x', '*').replaceAll('÷', '/');
+
+    try {
+      Parser parser = Parser();
+      Expression exp = parser.parse(expression);
+
+      ContextModel cm = ContextModel();
+      double evaluatedResult = exp.evaluate(EvaluationType.REAL, cm);
+
+      // Format result as integer or fractional
+      if (evaluatedResult % 1 == 0) {
+        result.value = evaluatedResult.toInt().toDouble(); // Ensure it remains double for consistency
       } else {
-        history[historyIndex.value + 1] = value;
-        history.removeRange(historyIndex.value + 2, history.length);
+        result.value = evaluatedResult;
       }
-      historyIndex.value = history.length - 1;
-    }
-  }
-
-  double _calculate(double num1, double num2, String operation) {
-    switch (operation) {
-      case "+":
-        return num1 + num2;
-      case "-":
-        return num1 - num2;
-      case "×":
-        return num1 * num2;
-      case "÷":
-        return num1 / num2;
-      default:
-        return num2;
+    } catch (e) {
+      result.value = 0.0; // Reset to 0 on invalid expression
     }
   }
 }

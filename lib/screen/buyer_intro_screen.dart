@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:product_info/controller/product_controller.dart';
+import 'package:product_info/model/buyer_address.dart';
+import 'package:product_info/widget/button_widget.dart';
 import 'package:product_info/widget/text_field_widget.dart';
 
 class BuyerIntroScreen extends StatefulWidget {
@@ -10,6 +14,8 @@ class BuyerIntroScreen extends StatefulWidget {
 }
 
 class _BuyerIntroScreenState extends State<BuyerIntroScreen> {
+  final ProductController productController = Get.find<ProductController>();
+
   TextEditingController nameController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   TextEditingController areaController = TextEditingController();
@@ -70,6 +76,22 @@ void initState() {
                   )
                 ],
               ),
+              SizedBox(height: MediaQuery.of(context).size.height * .2),
+              ButtonWidget(
+                title: 'নিশ্চিত',
+                onPressed: () {
+                  BuyerAddress address = BuyerAddress(
+                    name: nameController.text,
+                    date: dateController.text,
+                    area: areaController.text,
+                    contact: phoneController.text
+                  );
+
+                  productController.addBuyerAddress(address);
+
+                  Get.back();
+                }
+              )
             ],
           ),
         ),

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:product_info/controller/product_controller.dart';
+import 'package:product_info/model/saller_address.dart';
+import 'package:product_info/widget/button_widget.dart';
 import 'package:product_info/widget/text_field_widget.dart';
 
 class SallerIntroScreen extends StatefulWidget {
@@ -10,6 +14,8 @@ class SallerIntroScreen extends StatefulWidget {
 }
 
 class _SallerIntroScreenState extends State<SallerIntroScreen> {
+  final ProductController productController = Get.find<ProductController>();
+  
   TextEditingController nameController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   TextEditingController areaController = TextEditingController();
@@ -18,7 +24,7 @@ class _SallerIntroScreenState extends State<SallerIntroScreen> {
   @override
 void initState() {
   super.initState();
-  // Format the current date as 'dd/MM/yyyy'
+  
   dateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
 }
 
@@ -70,6 +76,22 @@ void initState() {
                   )
                 ],
               ),
+              SizedBox(height: MediaQuery.of(context).size.height * .2),
+              ButtonWidget(
+                title: 'নিশ্চিত',
+                onPressed: () {
+                  SallerAddress address = SallerAddress(
+                    name: nameController.text,
+                    date: dateController.text,
+                    area: areaController.text,
+                    contact: phoneController.text
+                  );
+
+                  productController.addSallerAddress(address);
+
+                  Get.back();
+                }
+              )
             ],
           ),
         ),

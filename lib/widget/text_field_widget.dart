@@ -31,7 +31,7 @@ class TextFieldWidget extends StatelessWidget {
         alignment: Alignment.topLeft,
         child: Text(
           title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold),
         ),
       ),
       const SizedBox(height: 6.0),

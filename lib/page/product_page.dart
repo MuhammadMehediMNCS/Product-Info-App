@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:product_info/controller/product_controller.dart';
-import 'package:product_info/page/buy_memo_page.dart';
+import 'package:product_info/page/purchased_memo_page.dart';
 import 'package:product_info/page/sale_memo_page.dart';
 import 'package:product_info/screen/add_product_screen.dart';
 import 'package:product_info/screen/edit_product_screen.dart';
@@ -22,6 +22,8 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
+        productController.productList.sort((a, b) => (a.name ?? '').compareTo(b.name ?? ''));
+        
         return ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           itemCount: productController.productList.length,
@@ -37,9 +39,9 @@ class _ProductPageState extends State<ProductPage> {
                   icon: Image.asset('images/edit.png', height: 22.0, width: 22.0,)
                 ),
                 title: Text(product.name ?? 'No Name'),
-                titleTextStyle: const TextStyle(color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.bold),
+                titleTextStyle: const TextStyle(color: Colors.black, fontFamily: 'TiroBangla-Regular', fontSize: 16.0, fontWeight: FontWeight.bold),
                 subtitle: Text(product.size ?? 'No Size'),
-                subtitleTextStyle: const TextStyle(color: Colors.grey, fontSize: 12.0),
+                subtitleTextStyle: const TextStyle(color: Colors.grey, fontFamily: 'TiroBangla-Regular', fontSize: 12.0),
                 trailing: Text(product.total ?? '0'),
                 leadingAndTrailingTextStyle: const TextStyle(color: Colors.indigo, fontSize: 18.0, fontWeight: FontWeight.bold),
                 onTap: () {
@@ -83,6 +85,7 @@ class _ProductPageState extends State<ProductPage> {
                                         const Text(
                                           'পণ্য বিক্রয়',
                                           style: TextStyle(
+                                            fontFamily: 'TiroBangla-Regular',
                                             fontSize: 14.0,
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -103,6 +106,7 @@ class _ProductPageState extends State<ProductPage> {
                                       const Text(
                                         'বিক্রয় মেমো',
                                         style: TextStyle(
+                                          fontFamily: 'TiroBangla-Regular',
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -144,6 +148,7 @@ class _ProductPageState extends State<ProductPage> {
                                       const Text(
                                         'পণ্য ক্রয়',
                                         style: TextStyle(
+                                          fontFamily: 'TiroBangla-Regular',
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -155,7 +160,7 @@ class _ProductPageState extends State<ProductPage> {
                               Expanded(
                                 child: InkWell(
                                   onTap: () {
-                                    Get.to(const BuyMemoPage());
+                                    Get.to(const PurchasedMemoPage());
                                   },
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
@@ -163,6 +168,7 @@ class _ProductPageState extends State<ProductPage> {
                                       const Text(
                                         'ক্রয় মেমো',
                                         style: TextStyle(
+                                          fontFamily: 'TiroBangla-Regular',
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.bold,
                                         ),

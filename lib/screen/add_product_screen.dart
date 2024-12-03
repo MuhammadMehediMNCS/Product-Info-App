@@ -24,7 +24,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('নতুন পণ্য'),
-        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w700),
+        titleTextStyle: const TextStyle(color: Colors.black, fontFamily: 'TiroBangla-Regular', fontSize: 18.0, fontWeight: FontWeight.w700),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),

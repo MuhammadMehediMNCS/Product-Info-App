@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:product_info/controller/product_controller.dart';
 import 'package:product_info/page/calculator_page.dart';
 import 'package:product_info/page/product_page.dart';
 
-void main() {
+void main() async {
   Get.put(ProductController());
+  await GetStorage.init();
   
   runApp(const MyApp());
 }

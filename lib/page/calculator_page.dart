@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:product_info/controller/calculator_controller.dart';
+import 'package:product_info/page/calculation_history_page.dart';
 
 class CalculatorPage extends StatefulWidget {
   const CalculatorPage({super.key});
@@ -13,364 +14,359 @@ class _CalculatorPageState extends State<CalculatorPage> {
   final CalculatorController controller = Get.put(CalculatorController());
 
   double _getFontSize(String output) {
-    return output.length > 8 ? 24.0 : 28.0;
+    return output.length > 24 ? 22.0 : 28.0;
   }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-      child: Column(
-        children: [
-          SizedBox(
-            height: screenHeight / 4,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    Obx(() => Container(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          controller.output.value,
-                          style: TextStyle(
-                            fontSize: _getFontSize(controller.output.value),
-                            fontWeight: FontWeight.bold
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 48, bottom: 16),
+        child: Column(
+          children: [
+            SizedBox(
+              height: screenHeight / 3,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      Obx(() => Container(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            controller.output.value,
+                            style: TextStyle(
+                              fontSize: _getFontSize(controller.output.value),
+                              fontWeight: FontWeight.bold
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
-                    Obx(() => Container(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          controller.showGT.value ? "${controller.output.value} GT" : controller.result.value.toString(),
-                          style: const TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold
-                          ),
+                      const SizedBox(height: 18),
+                      Obx(() => Container(
+                          alignment: Alignment.centerRight,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                controller.showGT.value ? "GT" : "",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                              Text(
+                                controller.result.value.toString(),
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              ),
+                            ],
+                          )
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        child: IconButton(
+                          onPressed: () {
+                            Get.to(() => const CalculationHistoryPage());
+                          }, 
+                          icon: const Icon(Icons.history, size: 32,)
                         )
                       ),
-                    )
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      child: Row(
+                      Obx(() => Flexible(
+                        child: buildButton(
+                            buttonColor: Colors.white,
+                            size: const Size(80, 60),
+                            borderColor: controller.output.value == "0" ? Colors.grey : const Color(0xff448fc1),
+                            textColor: controller.output.value == "0" ? Colors.grey : const Color(0xff448fc1),
+                            fontSize: 28,
+                            buttonText: '⌫',
+                            isInitial: false
+                          ),
+                      ))
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const Divider(color: Colors.grey),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(height: 8),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Flexible(
                             child: buildButton(
-                              buttonColor:  const Color(0xff448fc1),
-                              size: const Size(80, 50),
+                              buttonColor: Colors.red,
                               textColor: Colors.white,
-                              fontSize: 10,
-                              buttonText: '←  Check',
-                              isInitial: false
+                              fontSize: 18,
+                              buttonText: 'AC'
                             ),
                           ),
-                          const SizedBox(width: 18),
                           Flexible(
                             child: buildButton(
-                              buttonColor: const Color(0xff448fc1),
-                              size: const Size(80, 50),
-                              textColor: Colors.white,
+                              buttonColor: Colors.white,
+                              borderColor: Colors.blue,
+                              textColor: Colors.blue,
                               fontSize: 10,
-                              buttonText: 'Check  →',
-                              isInitial: false
+                              buttonText: 'MRC'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.blue,
+                              textColor: Colors.blue,
+                              fontSize: 16,
+                              buttonText: 'M+'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.blue,
+                              textColor: Colors.blue,
+                              fontSize: 16,
+                              buttonText: 'M-'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.blue,
+                              textColor: Colors.blue,
+                              fontSize: 16,
+                              buttonText: 'GT'
                             ),
                           )
                         ],
                       ),
-                    ),
-                    Obx(() => Flexible(
-                      child: buildButton(
-                          buttonColor: Colors.white,
-                          size: const Size(42, 50),
-                          borderColor: controller.output.value == "0" ? Colors.grey : const Color(0xff448fc1),
-                          textColor: controller.output.value == "0" ? Colors.grey : const Color(0xff448fc1),
-                          fontSize: 16,
-                          buttonText: '⌫',
-                          isInitial: false
-                        ),
-                    ))
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const Divider(color: Colors.grey),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(height: 8),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.red,
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.black45,
+                              textColor: Colors.red,
+                              fontSize: 28,
+                              buttonText: 'C'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.black45,
+                              textColor: Colors.black,
+                              fontSize: 20,
+                              buttonText: '7'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.black45,
+                              textColor: Colors.black,
+                              fontSize: 20,
+                              buttonText: '8'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.black45,
+                              textColor: Colors.black,
+                              fontSize: 20,
+                              buttonText: '9'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.blue,
+                              textColor: Colors.blue,
+                              fontSize: 24,
+                              buttonText: '÷'
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.black,
+                              textColor: Colors.black,
+                              fontSize: 20,
+                              buttonText: '√'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.black45,
+                              textColor: Colors.black,
+                              fontSize: 20,
+                              buttonText: '4'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.black45,
+                              textColor: Colors.black,
+                              fontSize: 20,
+                              buttonText: '5'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.black45,
+                              textColor: Colors.black,
+                              fontSize: 20,
+                              buttonText: '6'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.blue,
+                              textColor: Colors.blue,
+                              fontSize: 22,
+                              buttonText: 'x'
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.black,
+                              textColor: Colors.black,
+                              fontSize: 20,
+                              buttonText: '%'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.black45,
+                              textColor: Colors.black,
+                              fontSize: 20,
+                              buttonText: '1'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.black45,
+                              textColor: Colors.black,
+                              fontSize: 20,
+                              buttonText: '2'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.black45,
+                              textColor: Colors.black,
+                              fontSize: 20,
+                              buttonText: '3'
+                            ),
+                          ),
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.blue,
+                              textColor: Colors.blue,
+                              fontSize: 24,
+                              buttonText: '-'
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: buildButton(
+                              buttonColor: Colors.white,
+                              borderColor: Colors.black45,
+                              textColor: Colors.black,
+                              fontSize: 24,
+                              buttonText: '.'
+                            ),
+                          ),
+                          buildButton(
+                            buttonColor: Colors.white,
+                            borderColor: Colors.black45,
+                            textColor: Colors.black,
+                            fontSize: 20,
+                            buttonText: '0'
+                          ),
+                          buildButton(
+                            buttonColor: Colors.white,
+                            borderColor: Colors.black45,
+                            textColor: Colors.black,
+                            fontSize: 20,
+                            buttonText: '00'
+                          ),
+                          buildButton(
+                            buttonColor: Colors.blue,
                             textColor: Colors.white,
-                            fontSize: 12,
-                            buttonText: 'AC'
+                            fontSize: 24,
+                            buttonText: '='
                           ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.blue,
-                            textColor: Colors.blue,
-                            fontSize: 12,
-                            buttonText: 'MRC'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.blue,
-                            textColor: Colors.blue,
-                            fontSize: 16,
-                            buttonText: 'M+'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.blue,
-                            textColor: Colors.blue,
-                            fontSize: 16,
-                            buttonText: 'M-'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.blue,
-                            textColor: Colors.blue,
-                            fontSize: 12,
-                            buttonText: 'GT'
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: const Color(0xffaa6767),
-                            textColor: Colors.white,
-                            fontSize: 20,
-                            buttonText: 'C'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.black45,
-                            textColor: Colors.black,
-                            fontSize: 20,
-                            buttonText: '7'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.black45,
-                            textColor: Colors.black,
-                            fontSize: 20,
-                            buttonText: '8'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.black45,
-                            textColor: Colors.black,
-                            fontSize: 20,
-                            buttonText: '9'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
+                          buildButton(
                             buttonColor: Colors.white,
                             borderColor: Colors.blue,
                             textColor: Colors.blue,
                             fontSize: 24,
-                            buttonText: '÷'
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.black,
-                            textColor: Colors.black,
-                            fontSize: 20,
-                            buttonText: '√'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.black45,
-                            textColor: Colors.black,
-                            fontSize: 20,
-                            buttonText: '4'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.black45,
-                            textColor: Colors.black,
-                            fontSize: 20,
-                            buttonText: '5'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.black45,
-                            textColor: Colors.black,
-                            fontSize: 20,
-                            buttonText: '6'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.blue,
-                            textColor: Colors.blue,
-                            fontSize: 24,
-                            buttonText: '×'
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.black,
-                            textColor: Colors.black,
-                            fontSize: 20,
-                            buttonText: '%'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.black45,
-                            textColor: Colors.black,
-                            fontSize: 20,
-                            buttonText: '1'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.black45,
-                            textColor: Colors.black,
-                            fontSize: 20,
-                            buttonText: '2'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.black45,
-                            textColor: Colors.black,
-                            fontSize: 20,
-                            buttonText: '3'
-                          ),
-                        ),
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.blue,
-                            textColor: Colors.blue,
-                            fontSize: 24,
-                            buttonText: '-'
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: buildButton(
-                            buttonColor: Colors.white,
-                            borderColor: Colors.black45,
-                            textColor: Colors.black,
-                            fontSize: 24,
-                            buttonText: '.'
-                          ),
-                        ),
-                        buildButton(
-                          buttonColor: Colors.white,
-                          borderColor: Colors.black45,
-                          textColor: Colors.black,
-                          fontSize: 20,
-                          buttonText: '0'
-                        ),
-                        buildButton(
-                          buttonColor: Colors.white,
-                          borderColor: Colors.black45,
-                          textColor: Colors.black,
-                          fontSize: 20,
-                          buttonText: '00'
-                        ),
-                        buildButton(
-                          buttonColor: Colors.blue,
-                          textColor: Colors.white,
-                          fontSize: 24,
-                          buttonText: '='
-                        ),
-                        buildButton(
-                          buttonColor: Colors.white,
-                          borderColor: Colors.blue,
-                          textColor: Colors.blue,
-                          fontSize: 24,
-                          buttonText: '+'
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          )
-        ],
+                            buttonText: '+'
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

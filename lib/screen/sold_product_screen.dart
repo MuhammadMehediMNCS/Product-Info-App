@@ -67,7 +67,7 @@ class _SoldProductScreenState extends State<SoldProductScreen> {
     updatedProduct.total = remainingProducts.toString();
     productController.updateProduct(widget.index, updatedProduct);
 
-    var soldProduct = SoldProduct(
+    SoldProduct soldProduct = SoldProduct(
       productName: widget.productName,
       productSize: widget.productSize,
       soldAmount: amountController.text,
@@ -77,7 +77,7 @@ class _SoldProductScreenState extends State<SoldProductScreen> {
     );
     productController.addSoldProduct(soldProduct);
 
-    Get.off(const HomePage());
+    Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 
   @override
@@ -89,12 +89,12 @@ class _SoldProductScreenState extends State<SoldProductScreen> {
           children: [
             Text(
               widget.productName ?? "No Name",
-              style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 6.0),
             Text(
               widget.productSize ?? "No Size",
-              style: const TextStyle(color: Colors.grey, fontSize: 10.0, fontWeight: FontWeight.bold),
+              style: const TextStyle(color: Colors.grey, fontFamily: 'TiroBangla-Regular', fontSize: 10.0, fontWeight: FontWeight.bold),
             )
           ],
         ),

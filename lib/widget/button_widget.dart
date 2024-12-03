@@ -22,6 +22,7 @@ class ButtonWidget extends StatelessWidget {
     child: Text(
       title,
       style: const TextStyle(
+        fontFamily: 'TiroBangla-Regular',
         fontSize: 24,
         color: Colors.white
       ),

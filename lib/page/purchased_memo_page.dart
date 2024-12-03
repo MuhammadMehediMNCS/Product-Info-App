@@ -3,15 +3,15 @@ import 'package:get/get.dart';
 import 'package:product_info/controller/product_controller.dart';
 import 'package:product_info/screen/buyer_intro_screen.dart';
 
-class BuyMemoPage extends StatefulWidget {
+class PurchasedMemoPage extends StatefulWidget {
 
-  const BuyMemoPage({super.key});
+  const PurchasedMemoPage({super.key});
 
   @override
-  State<BuyMemoPage> createState() => _BuyMemoPageState();
+  State<PurchasedMemoPage> createState() => _PurchasedMemoPageState();
 }
 
-class _BuyMemoPageState extends State<BuyMemoPage> {
+class _PurchasedMemoPageState extends State<PurchasedMemoPage> {
   final ProductController productController = Get.find<ProductController>();
   
   @override
@@ -54,18 +54,21 @@ class _BuyMemoPageState extends State<BuyMemoPage> {
             const Text('বিঃ দ্রঃ শরিফ হোম অ্যাপ্লায়েন্স, বিআরবি, আরএফএল', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
             const Text('চৌমাশিয়া নওহাটার মোড় পেট্রোল পাম্পের দক্ষিণ পার্শ্বে, মহাদেবপুর, নওগাঁ।', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 12.0, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10.0),
-            Row(
+            Obx(() {
+              final buyerAddress = productController.buyerAddress.value;
+
+              return Column(
+                children: [
+                  Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  color: Colors.red,
+                SizedBox(
                   width: MediaQuery.of(context).size.width * .50,
-                  child: Text('নাম:.............')
+                  child: Text('নাম: ${buyerAddress.name ?? "................"}', style: const TextStyle(fontFamily: 'TiroBangla-Regular'))
                 ),
-                Container(
-                  color: Colors.blue,
+                SizedBox(
                   width: MediaQuery.of(context).size.width * .40,
-                  child: Text('তারিখ:.............')
+                  child: Text('তারিখ: ${buyerAddress.date ?? "................"}', style: const TextStyle(fontFamily: 'TiroBangla-Regular'))
                 ),
               ],
             ),
@@ -74,14 +77,17 @@ class _BuyMemoPageState extends State<BuyMemoPage> {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context). size.width * .50,
-                  child: Text('ঠিকানা:.............')
+                  child: Text('ঠিকানা: ${buyerAddress.area ?? "................"}', style: const TextStyle(fontFamily: 'TiroBangla-Regular'))
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * .40,
-                  child: Text('মোবাইল:.............')
+                  child: Text('মোবাইল: ${buyerAddress.contact ?? "................"}', style: const TextStyle(fontFamily: 'TiroBangla-Regular'))
                 ),
               ],
             ),
+                ],
+              );
+            }),
             const SizedBox(height: 10.0),
             Container(
               color: Colors.grey,
@@ -125,27 +131,27 @@ class _BuyMemoPageState extends State<BuyMemoPage> {
                       children: [
                         SizedBox(
                           width: MediaQuery.of(context).size.width * .25,
-                          child: Center(child: Text(buyProduct.productName ?? "No Name"))
+                          child: Center(child: Text(buyProduct.productName ?? "No Name", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)))
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * .10,
-                          child: Center(child: Text(buyProduct.productSize ?? "N/A"))
+                          child: Center(child: Text(buyProduct.productSize ?? "N/A", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)))
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * .10,
-                          child: Center(child: Text(buyProduct.orderProduct ?? "0"))
+                          child: Center(child: Text(buyProduct.orderProduct ?? "0", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)))
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * .15,
-                          child: Center(child: Text(buyProduct.newProduct ?? "0"))
+                          child: Center(child: Text(buyProduct.newProduct ?? "0", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)))
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * .15,
-                          child: Center(child: Text(buyProduct.dueProduct ?? "0"))
+                          child: Center(child: Text(buyProduct.dueProduct ?? "0", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)))
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * .20,
-                          child: Center(child: Text(buyProduct.totalPrice ?? "0"))
+                          child: Center(child: Text(buyProduct.totalPrice ?? "0", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)))
                         ),
                       ],
                     );
