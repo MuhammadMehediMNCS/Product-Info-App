@@ -17,7 +17,7 @@ class _CalculationHistoryPageState extends State<CalculationHistoryPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("History"),
-        titleTextStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        titleTextStyle: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
       ),
       body: Obx(() => ListView.builder(
           itemCount: controller.history.length,

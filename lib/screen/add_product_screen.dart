@@ -41,7 +41,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   Expanded(
                     child: TextFieldWidget(
                       title: 'মোট পণ্য :',
-                      controller: totalProduct
+                      controller: totalProduct,
+                      keyboard: TextInputType.number,
                     ),
                   ),
                   SizedBox(width: MediaQuery.of(context).size.width * .2),

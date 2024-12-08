@@ -52,7 +52,7 @@ class _PurchasedMemoPageState extends State<PurchasedMemoPage> {
               style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 12.0),
             ),
             const Text('বিঃ দ্রঃ শরিফ হোম অ্যাপ্লায়েন্স, বিআরবি, আরএফএল', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
-            const Text('চৌমাশিয়া নওহাটার মোড় পেট্রোল পাম্পের দক্ষিণ পার্শ্বে, মহাদেবপুর, নওগাঁ।', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 12.0, fontWeight: FontWeight.bold)),
+            const Text('চৌমাশিয়া নওহাটার মোড় পেট্রোল পাম্পের দক্ষিণ পার্শ্বে, মহাদেবপুর, নওগাঁ।', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 11.0, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10.0),
             Obx(() {
               final buyerAddress = productController.buyerAddress.value;
@@ -91,31 +91,31 @@ class _PurchasedMemoPageState extends State<PurchasedMemoPage> {
             const SizedBox(height: 10.0),
             Container(
               color: Colors.grey,
-              child: Row(
+              child: const Row(
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * .25,
-                    child: const Center(child: Text('পণ্যের বিবরণ', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold))),
+                  Expanded(
+                    flex: 3,
+                    child: Center(child: Text('পণ্যের বিবরণ', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 12.0, fontWeight: FontWeight.bold))),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * .10,
-                    child: const Center(child: Text('সাইজ', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold))),
+                  Expanded(
+                    flex: 2,
+                    child: Center(child: Text('সাইজ', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 12.0, fontWeight: FontWeight.bold))),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * .10,
-                    child: const Center(child: Text('অর্ডার', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold))),
+                  Expanded(
+                    flex: 1,
+                    child: Center(child: Text('অর্ডার', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 12.0, fontWeight: FontWeight.bold))),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * .15,
-                    child: const Center(child: Text('নতুন পণ্য', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold))),
+                  Expanded(
+                    flex: 1,
+                    child: Center(child: Text('নতুন', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 12.0, fontWeight: FontWeight.bold))),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * .15,
-                    child: const Center(child: Text('বাঁকি পণ্য', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold))),
+                  Expanded(
+                    flex: 1,
+                    child: Center(child: Text('বাঁকি', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 12.0, fontWeight: FontWeight.bold))),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * .20,
-                    child: const Center(child: Text('টাকা', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold))),
+                  Expanded(
+                    flex: 2,
+                    child: Center(child: Text('টাকা', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 12.0, fontWeight: FontWeight.bold))),
                   )
                 ],
               ),
@@ -129,29 +129,29 @@ class _PurchasedMemoPageState extends State<PurchasedMemoPage> {
               
                     return Row(
                       children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * .25,
-                          child: Center(child: Text(buyProduct.productName ?? "No Name", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)))
+                        Expanded(
+                          flex: 3,
+                          child: Center(child: Text(buyProduct.productName ?? "No Name", style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.w600)))
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * .10,
-                          child: Center(child: Text(buyProduct.productSize ?? "N/A", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)))
+                        Expanded(
+                          flex: 2,
+                          child: Center(child: Text(buyProduct.productSize ?? "N/A", style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.w600)))
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * .10,
-                          child: Center(child: Text(buyProduct.orderProduct ?? "0", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)))
+                        Expanded(
+                          flex: 1,
+                          child: Center(child: Text(buyProduct.orderProduct ?? "0", style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.w600)))
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * .15,
-                          child: Center(child: Text(buyProduct.newProduct ?? "0", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)))
+                        Expanded(
+                          flex: 1,
+                          child: Center(child: Text(buyProduct.newProduct ?? "0", style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.w600)))
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * .15,
-                          child: Center(child: Text(buyProduct.dueProduct ?? "0", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)))
+                        Expanded(
+                          flex: 1,
+                          child: Center(child: Text(buyProduct.dueProduct ?? "0", style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.w600)))
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * .20,
-                          child: Center(child: Text(buyProduct.totalPrice ?? "0", style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)))
+                        Expanded(
+                          flex: 2,
+                          child: Center(child: Text(buyProduct.totalPrice ?? "0", style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.w600)))
                         ),
                       ],
                     );
@@ -159,14 +159,18 @@ class _PurchasedMemoPageState extends State<PurchasedMemoPage> {
                 );
               }),
             ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text('বিক্রেতার স্বাক্ষর', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
-                Text('ক্রেতার স্বাক্ষর', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
-              ],
+            const SizedBox(height: 10.0),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * .84,
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('বিক্রেতার স্বাক্ষর', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
+                  Text('ক্রেতার স্বাক্ষর', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
+                ],
+              ),
             ),
-            const SizedBox(height: 20.0)
+            const SizedBox(height: 12.0)
           ],
         ),
       )

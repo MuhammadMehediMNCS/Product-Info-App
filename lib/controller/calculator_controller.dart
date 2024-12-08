@@ -67,10 +67,7 @@ class CalculatorController extends GetxController {
         ? result.value.toInt().toString()
         : result.value.toString();
 
-    // Add result to history with button text sequence
     addToHistory(formattedOutput, result.value.toString());
-
-    // Add the result to resultList and reset
     resultList.add(result.value);
     result.value = 0;
     showGT.value = true;
