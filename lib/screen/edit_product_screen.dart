@@ -60,8 +60,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: const BackButton(color: Colors.pink),
         title: const Text('এডিট করুন'),
-        titleTextStyle: const TextStyle(color: Colors.black, fontFamily: 'TiroBangla-Regular', fontSize: 18.0, fontWeight: FontWeight.w700),
+        titleTextStyle: const TextStyle(color: Colors.pink, fontFamily: 'TiroBangla-Regular', fontSize: 18.0, fontWeight: FontWeight.w700),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

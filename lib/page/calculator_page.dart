@@ -84,8 +84,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
                         child: buildButton(
                             buttonColor: Colors.white,
                             size: const Size(80, 60),
-                            borderColor: controller.output.value == "0" ? Colors.grey : const Color(0xff448fc1),
-                            textColor: controller.output.value == "0" ? Colors.grey : const Color(0xff448fc1),
+                            borderColor: controller.output.value == "0" ? Colors.grey : Colors.pink,
+                            textColor: controller.output.value == "0" ? Colors.grey :  Colors.pink,
                             fontSize: 28,
                             buttonText: '⌫',
                             isInitial: false
@@ -118,8 +118,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
                           Flexible(
                             child: buildButton(
                               buttonColor: Colors.white,
-                              borderColor: Colors.blue,
-                              textColor: Colors.blue,
+                              borderColor: Colors.pink,
+                              textColor: Colors.pink,
                               fontSize: 10,
                               buttonText: 'MRC'
                             ),
@@ -127,8 +127,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
                           Flexible(
                             child: buildButton(
                               buttonColor: Colors.white,
-                              borderColor: Colors.blue,
-                              textColor: Colors.blue,
+                              borderColor: Colors.pink,
+                              textColor: Colors.pink,
                               fontSize: 16,
                               buttonText: 'M+'
                             ),
@@ -136,8 +136,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
                           Flexible(
                             child: buildButton(
                               buttonColor: Colors.white,
-                              borderColor: Colors.blue,
-                              textColor: Colors.blue,
+                              borderColor: Colors.pink,
+                              textColor: Colors.pink,
                               fontSize: 16,
                               buttonText: 'M-'
                             ),
@@ -145,8 +145,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
                           Flexible(
                             child: buildButton(
                               buttonColor: Colors.white,
-                              borderColor: Colors.blue,
-                              textColor: Colors.blue,
+                              borderColor: Colors.pink,
+                              textColor: Colors.pink,
                               fontSize: 16,
                               buttonText: 'GT'
                             ),
@@ -199,8 +199,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
                           Flexible(
                             child: buildButton(
                               buttonColor: Colors.white,
-                              borderColor: Colors.blue,
-                              textColor: Colors.blue,
+                              borderColor: Colors.pink,
+                              textColor: Colors.pink,
                               fontSize: 24,
                               buttonText: '÷'
                             ),
@@ -253,8 +253,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
                           Flexible(
                             child: buildButton(
                               buttonColor: Colors.white,
-                              borderColor: Colors.blue,
-                              textColor: Colors.blue,
+                              borderColor: Colors.pink,
+                              textColor: Colors.pink,
                               fontSize: 22,
                               buttonText: 'x'
                             ),
@@ -307,8 +307,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
                           Flexible(
                             child: buildButton(
                               buttonColor: Colors.white,
-                              borderColor: Colors.blue,
-                              textColor: Colors.blue,
+                              borderColor: Colors.pink,
+                              textColor: Colors.pink,
                               fontSize: 24,
                               buttonText: '-'
                             ),
@@ -346,15 +346,15 @@ class _CalculatorPageState extends State<CalculatorPage> {
                             buttonText: '00'
                           ),
                           buildButton(
-                            buttonColor: Colors.blue,
+                            buttonColor: Colors.pink,
                             textColor: Colors.white,
                             fontSize: 24,
                             buttonText: '='
                           ),
                           buildButton(
                             buttonColor: Colors.white,
-                            borderColor: Colors.blue,
-                            textColor: Colors.blue,
+                            borderColor: Colors.pink,
+                            textColor: Colors.pink,
                             fontSize: 24,
                             buttonText: '+'
                           )

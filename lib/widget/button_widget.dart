@@ -14,10 +14,10 @@ class ButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) => ElevatedButton(
     onPressed: onPressed,
     style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.indigo,
+      backgroundColor: Colors.pink,
       minimumSize: const Size(300.0, 60.0),
       shape: const StadiumBorder(),
-      side: const BorderSide(color: Colors.black)
+      side: const BorderSide(color: Colors.black26)
     ),
     child: Text(
       title,

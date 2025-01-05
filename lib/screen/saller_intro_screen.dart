@@ -32,8 +32,9 @@ void initState() {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: const BackButton(color: Colors.pink),
         title: const Text('বিক্রেতার তথ্য'),
-        titleTextStyle: const TextStyle(color: Colors.black, fontFamily: 'TiroBangla-Regular', fontSize: 18.0, fontWeight: FontWeight.bold),
+        titleTextStyle: const TextStyle(color: Colors.pink, fontFamily: 'TiroBangla-Regular', fontSize: 18.0, fontWeight: FontWeight.bold),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),

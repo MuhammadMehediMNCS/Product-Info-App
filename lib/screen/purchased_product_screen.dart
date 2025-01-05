@@ -99,17 +99,18 @@ class _PurchasedProductScreenState extends State<PurchasedProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: const BackButton(color: Colors.pink),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               widget.productName ?? "No Name",
-              style: const TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 16.0, fontWeight: FontWeight.bold),
+              style: const TextStyle(color: Colors.pink, fontFamily: 'TiroBangla-Regular', fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 6.0),
             Text(
               widget.productSize ?? "No Size",
-              style: const TextStyle(color: Colors.grey, fontFamily: 'TiroBangla-Regular', fontSize: 10.0, fontWeight: FontWeight.bold),
+              style: const TextStyle(color: Color(0xFFFCB2E9), fontFamily: 'TiroBangla-Regular', fontSize: 10.0, fontWeight: FontWeight.bold),
             )
           ],
         )

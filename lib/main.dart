@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:product_info/controller/product_controller.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.indigo),
+      theme: ThemeData(primarySwatch: Colors.pink),
       home: const HomePage(),
     );
   }
@@ -40,44 +41,69 @@ class _HomePageState extends State<HomePage> {
     const CalculatorPage()
   ];
 
+  DateTime? doublePressed;
+
+  Future<bool> onWillPop() async {
+    DateTime currentTime = DateTime.now();
+
+    bool backHandeler = doublePressed == null || currentTime.difference(doublePressed!) > const Duration(seconds: 3);
+
+    if (backHandeler) {
+      doublePressed = currentTime;
+      Fluttertoast.showToast(
+        msg: "Double press back to leave the app.",
+        backgroundColor: Colors.pink,
+        textColor: Colors.white,
+        gravity: ToastGravity.CENTER
+      );
+
+      return false;
+    }
+    
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: pages[selectedindex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedindex,
-        onTap: (index) {
-          setState(() {
-            selectedindex = index;
-          });
-        },
-        backgroundColor: Colors.indigo,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey,
-        selectedIconTheme: const IconThemeData(color: Colors.white),
-        unselectedIconTheme: const IconThemeData(color: Colors.grey),
-        items: [
-          BottomNavigationBarItem(
-            icon: ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                selectedindex == 0 ? Colors.white : Colors.grey,
-                BlendMode.srcIn,
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: Scaffold(
+        body: pages[selectedindex],
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: selectedindex,
+          onTap: (index) {
+            setState(() {
+              selectedindex = index;
+            });
+          },
+          backgroundColor: Colors.pink,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.grey,
+          selectedIconTheme: const IconThemeData(color: Colors.white),
+          unselectedIconTheme: const IconThemeData(color: Colors.grey),
+          items: [
+            BottomNavigationBarItem(
+              icon: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  selectedindex == 0 ? Colors.white : Colors.grey,
+                  BlendMode.srcIn,
+                ),
+                child: Image.asset('images/product.png', height: 24.0, width: 24.0),
               ),
-              child: Image.asset('images/product.png', height: 24.0, width: 24.0),
+              label: 'পণ্যের তথ্য',
             ),
-            label: 'পণ্যের তথ্য',
-          ),
-          BottomNavigationBarItem(
-            icon: ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                selectedindex == 1 ? Colors.white : Colors.grey,
-                BlendMode.srcIn,
+            BottomNavigationBarItem(
+              icon: ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  selectedindex == 1 ? Colors.white : Colors.grey,
+                  BlendMode.srcIn,
+                ),
+                child: Image.asset('images/calculator.png', height: 24.0, width: 24.0),
               ),
-              child: Image.asset('images/calculator.png', height: 24.0, width: 24.0),
+              label: 'ক্যালকুলেটর',
             ),
-            label: 'ক্যালকুলেটর',
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

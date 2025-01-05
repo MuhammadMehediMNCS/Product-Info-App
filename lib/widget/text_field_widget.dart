@@ -31,19 +31,21 @@ class TextFieldWidget extends StatelessWidget {
         alignment: Alignment.topLeft,
         child: Text(
           title,
-          style: const TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold),
+          style: const TextStyle(color: Colors.pink, fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold),
         ),
       ),
       const SizedBox(height: 6.0),
       TextFormField(
+        cursorColor: Colors.pink,
         keyboardType: keyboard,
         controller: controller,
         decoration: InputDecoration(
           labelText: labelText,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.0),
-              borderSide: const BorderSide(color: Colors.indigo)),
+            borderRadius: BorderRadius.circular(12.0),
+            borderSide: const BorderSide(color: Colors.pink)
+          ),
         ),
         readOnly: readOnly,
         maxLines: maxLine,

@@ -1,7 +1,12 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:product_info/controller/product_controller.dart';
 import 'package:product_info/screen/buyer_intro_screen.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class PurchasedMemoPage extends StatefulWidget {
 
@@ -14,29 +19,138 @@ class PurchasedMemoPage extends StatefulWidget {
 class _PurchasedMemoPageState extends State<PurchasedMemoPage> {
   final ProductController productController = Get.find<ProductController>();
   
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: const BackButton(color: Colors.pink),
         title: const Text("ক্রয় মেমো"),
-        titleTextStyle: const TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 18.0, fontWeight: FontWeight.bold),
+        titleTextStyle: const TextStyle(color: Colors.pink, fontFamily: 'TiroBangla-Regular', fontSize: 18.0, fontWeight: FontWeight.bold),
         actions: [
           IconButton(
             onPressed: () {
               Get.to(const BuyerIntroScreen());
             },
-            icon: const Icon(Icons.people)
+            icon: const Icon(Icons.people, color: Colors.pink)
           ),
           IconButton(
-            onPressed: () {
-              if (productController.soldProductList.isNotEmpty) {
-                productController.soldProductList.clear();
-                Get.snackbar("Success", "All sale data has been deleted.");
-              } else {
-                Get.snackbar("Info", "No data to delete.");
+            onPressed: () async {
+              if (productController.purchasedProductList.isEmpty) {
+                Get.snackbar("Info", "No data to export.");
+                return;
+              }
+
+              if (await Permission.storage.request().isGranted) {
+                Get.snackbar("Error", "Storage permission is required to export the PDF.");
+                return;
+              }
+
+              try {
+                final externalDir = await getExternalStorageDirectory();
+                if (externalDir == null) {
+                  Get.snackbar("Error", "Unable to access storage.");
+                  return;
+                }
+
+                final Directory parentFolder = Directory('${externalDir.path}/Shapahar Hardware');
+                final Directory saleFolder = Directory('${parentFolder.path}/Buy');
+
+                if (!await parentFolder.exists()) await parentFolder.create(recursive: true);
+                if (!await saleFolder.exists()) await saleFolder.create(recursive: true);
+
+                // Generate a unique file name
+                String baseFileName = 'sale_memo';
+                String fileExtension = '.pdf';
+                String filePath = '${saleFolder.path}/$baseFileName$fileExtension';
+
+                int fileCount = 1;
+                while (await File(filePath).exists()) {
+                  filePath = '${saleFolder.path}/$baseFileName($fileCount)$fileExtension';
+                  fileCount++;
+                }
+
+                final file = File(filePath);
+
+                final pdf = pw.Document();
+                final fontData = await rootBundle.load("fonts/NotoSansBengali-Regular.ttf");
+                final font = pw.Font.ttf(fontData.buffer.asByteData());
+
+                pdf.addPage(
+                  pw.Page(
+                    build: (pw.Context context) {
+                      return pw.Column(
+                        children: [
+                          pw.Text('বিসমিল্লাহির রাহমানির রাহিম', style: pw.TextStyle(font: font, fontSize: 10.0)),
+                          pw.Text('সাপাহার হার্ডওয়ার', style: pw.TextStyle(font: font, fontSize: 18.0, fontWeight: pw.FontWeight.bold)),
+                          pw.Text('প্রোঃ মোঃ আজিজুল হাকিম', style: pw.TextStyle(font: font, fontSize: 12.0, fontWeight: pw.FontWeight.bold)),
+                          pw.Text(
+                            'এখানে পিভিসি পাইপ ফিটিং, প্লাস্টিক সামগ্রী এবং ইলেকট্রিক ও\nহার্ডওয়্যার সামগ্রী খুচরা ও পাইকারী সুলভ মূল্যে পাওয়া যায়।',
+                            style: pw.TextStyle(font: font, fontSize: 12.0),
+                          ),
+                          pw.Text('বিঃ দ্রঃ আনোয়ার সিমেন্ট সিট, বিআরবি, আরএফএল', style: pw.TextStyle(font: font, fontWeight: pw.FontWeight.bold)),
+                          pw.Text('চৌমাশিয়া নওহাটার মোড় পেট্রোল পাম্পের দক্ষিণ পার্শ্বে, মহাদেবপুর, নওগাঁ।', style: pw.TextStyle(font: font, fontSize: 11.0, fontWeight: pw.FontWeight.bold)),
+                          pw.SizedBox(height: 10.0),
+                          pw.Row(
+                            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                            children: [
+                              pw.Text('নাম : ${productController.sallerAddress.value.name ?? "................"}', style: pw.TextStyle(font: font)),
+                              pw.Text('তারিখ : ${productController.sallerAddress.value.date ?? "................"}', style: pw.TextStyle(font: font)),
+                            ],
+                          ),
+                          pw.Row(
+                            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                            children: [
+                              pw.Text('ঠিকানা : ${productController.sallerAddress.value.name ?? "................"}', style: pw.TextStyle(font: font)),
+                              pw.Text('মোবাইল : ${productController.sallerAddress.value.date ?? "................"}', style: pw.TextStyle(font: font)),
+                            ],
+                          ),
+                          pw.Table.fromTextArray(
+                            headers: ['পণ্যের বিবরণ', 'সাইজ', 'অর্ডার', 'নতুন', 'বাঁকি', 'টাকা'],
+                            data: productController.purchasedProductList.map((product) {
+                              return [
+                                product.productName ?? 'No Name',
+                                product.productSize ?? 'N/A',
+                                product.orderProduct ?? '0',
+                                product.newProduct ?? '0',
+                                product.dueProduct ?? '0',
+                                product.totalPrice ?? '0'
+                              ];
+                            }).toList(),
+                            headerStyle: pw.TextStyle(font: font, fontWeight: pw.FontWeight.bold),
+                            cellStyle: pw.TextStyle(font: font),
+                          ),
+                          pw.SizedBox(height: 44.0),
+                          pw.Row(
+                            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                            children: [
+                              pw.Text('বিক্রেতার স্বাক্ষর', style: pw.TextStyle(font: font, fontWeight: pw.FontWeight.bold)),
+                              pw.Text('ক্রেতার স্বাক্ষর', style: pw.TextStyle(font: font, fontWeight: pw.FontWeight.bold)),
+                            ]
+                          )
+                        ],
+                      );
+                    },
+                  ),
+                );
+
+                await file.writeAsBytes(await pdf.save());
+
+                // Clear the data after saving
+                productController.sallerAddress.update((val) {
+                  val?.name = null;
+                  val?.date = null;
+                  val?.area = null;
+                  val?.contact = null;
+                });
+                productController.purchasedProductList.clear();
+
+                Get.snackbar("Success", "PDF exported successfully to ${file.path}");
+              } catch (e) {
+                Get.snackbar("Error", "Failed to export PDF: $e");
               }
             }, 
-            icon: const Icon(Icons.file_download_outlined)
+            icon: const Icon(Icons.file_download_outlined, color: Colors.pink)
           )
         ],
       ),
@@ -46,12 +160,12 @@ class _PurchasedMemoPageState extends State<PurchasedMemoPage> {
           children: [
             const Text('বিসমিল্লাহির রাহমানির রাহিম', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 10.0)),
             const Text('সাপাহার হার্ডওয়ার', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 18.0, fontWeight: FontWeight.bold)),
-            const Text('প্রোঃ মোঃ আজিজুল হাকিম (আজিজ)', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
+            const Text('প্রোঃ মোঃ আজিজুল হাকিম', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
             const Text(
               'এখানে পিভিসি পাইপ ফিটিং, প্লাস্টিক সামগ্রী এবং ইলেকট্রিক ও\nহার্ডওয়্যার সামগ্রী খুচরা ও পাইকারী সুলভ মূল্যে পাওয়া যায়।',
               style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 12.0),
             ),
-            const Text('বিঃ দ্রঃ শরিফ হোম অ্যাপ্লায়েন্স, বিআরবি, আরএফএল', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
+            const Text('বিঃ দ্রঃ আনোয়ার সিমেন্ট সিট, বিআরবি, আরএফএল', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
             const Text('চৌমাশিয়া নওহাটার মোড় পেট্রোল পাম্পের দক্ষিণ পার্শ্বে, মহাদেবপুর, নওগাঁ।', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontSize: 11.0, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10.0),
             Obx(() {
@@ -160,17 +274,14 @@ class _PurchasedMemoPageState extends State<PurchasedMemoPage> {
               }),
             ),
             const SizedBox(height: 10.0),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * .84,
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('বিক্রেতার স্বাক্ষর', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
-                  Text('ক্রেতার স্বাক্ষর', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
-                ],
-              ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text('বিক্রেতার স্বাক্ষর', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
+                Text('ক্রেতার স্বাক্ষর', style: TextStyle(fontFamily: 'TiroBangla-Regular', fontWeight: FontWeight.bold)),
+              ],
             ),
-            const SizedBox(height: 12.0)
+            const SizedBox(height: 10.0)
           ],
         ),
       )
